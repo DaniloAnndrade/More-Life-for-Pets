@@ -55,6 +55,8 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("com.google.dagger:hilt-android:2.52")
+    implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling)
     ksp("com.google.dagger:hilt-compiler:2.52")
 
     val roomVersion = "2.6.1"
