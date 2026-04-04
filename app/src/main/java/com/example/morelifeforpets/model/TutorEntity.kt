@@ -10,6 +10,8 @@ data class TutorEntity(
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
     val nomeT: String,
+    val email: String,
+    val cpf: String,
     val tell: String) {
 
 }

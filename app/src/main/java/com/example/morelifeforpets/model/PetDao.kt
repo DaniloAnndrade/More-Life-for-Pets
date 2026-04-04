@@ -5,18 +5,19 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PetDao {
     @Insert
-    fun addPet(pet: PetEntity)
+    suspend fun addPet(pet: PetEntity)
 
     @Update
-    fun updatePet(pet: PetEntity)
+    suspend fun updatePet(pet: PetEntity)
 
     @Delete
-    fun delPet(pet: PetEntity)
+    suspend fun delPet(pet: PetEntity)
 
     @Query("SELECT * FROM pet")
-    fun searchPet(): List<PetEntity>
+    fun searchPet(): Flow<List<PetEntity>>
 }

@@ -56,6 +56,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("com.google.dagger:hilt-android:2.52")
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
     debugImplementation(libs.androidx.ui.tooling)
     ksp("com.google.dagger:hilt-compiler:2.52")
 
