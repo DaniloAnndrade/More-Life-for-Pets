@@ -76,7 +76,7 @@ fun TelaInicial(navController: NavController) {
         Button(onClick = {navController.navigate("Cadastro") }){
             Text(text = "Cadastro")
         }
-        Button(onClick = { }){
+        Button(onClick = {navController.navigate("Exibir")}){
             Text(text = "Entrar")}
 }}
 @Composable
@@ -158,7 +158,10 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
     val listaDeTutor by tutorViewModel.todosOsTutores.collectAsState(initial = emptyList())
     val listaDePet by petViewModel.todasOsPet.collectAsState(initial = emptyList())
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize()) {
         // Título da página
         item {
             Text(text = "Lista de Cadastrados", style = MaterialTheme.typography.headlineMedium)
