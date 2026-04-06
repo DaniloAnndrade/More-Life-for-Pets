@@ -8,9 +8,13 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,6 +26,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -138,7 +144,7 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
                 // Salva os dados no banco de dados Room
         Button(onClick = {
             val novoTutor = TutorEntity(nomeT = nomeTutor, email = email, cpf = cpf, tell = tell)
-            val novoPet = PetEntity(nomeP = nomePet, tipo = tipoPet, idade = idadePet.toInt())
+            val novoPet = PetEntity(nomeP = nomePet, tipo = tipoPet, idade = idadePet.toInt(), tutorCpf = cpf)
 
             petViewModel.salvarPet(novoPet)
             tutorViewModel.salvar(novoTutor)
@@ -159,24 +165,37 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
     val listaDePet by petViewModel.todasOsPet.collectAsState(initial = emptyList())
 
     LazyColumn(
+
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()) {
-        // Título da página
-        item {
-            Text(text = "Lista de Cadastrados", style = MaterialTheme.typography.headlineMedium)
-        }
+        item {// Título da página
+        Text(text = "Lista de Cadastrados", style = MaterialTheme.typography.headlineMedium)
 
-        // Seção de Pets
-        item { Text(text = "\n--- Pets ---", style = MaterialTheme.typography.titleLarge) }
-        items(listaDePet) { pet ->
-            Text(text = "Nome: ${pet.nomeP} \nTipo: ${pet.tipo} \nIdade: ${pet.idade}\n")
         }
-
-        // Seção de Tutores
-        item { Text(text = "\n--- Tutores ---", style = MaterialTheme.typography.titleLarge) }
+        // Seção de Tutores }
         items(listaDeTutor) { tutor ->
-            Text(text = "Nome: ${tutor.nomeT} \nEmail: ${tutor.email} \nCPF: ${tutor.cpf} \nTelefone: ${tutor.tell}\n")
+            val petDoTutor = listaDePet.find{ pet -> pet.tutorCpf == tutor.cpf }
+
+            Card(modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)){
+                Column(
+                    modifier = Modifier.padding(16.dp)){
+                    Text(text = "Tutor: ${tutor.nomeT} \nEmail: ${tutor.email} \nCPF: ${tutor.cpf} \nTelefone: ${tutor.tell}\n",
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Bold)
+                    if (petDoTutor != null){
+                        Text(text = "Pet: ${petDoTutor.nomeP} \nTipo: ${petDoTutor.tipo} \nIdade: ${petDoTutor.idade}\n")
+                    }
+                    else{
+                        Text(text = "Esse tutor não possui pets cadastrados")
+                    }
+            }
+            }
+
         }
-    }
-}
+}}
+

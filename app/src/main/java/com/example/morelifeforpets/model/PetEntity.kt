@@ -10,6 +10,7 @@ data class PetEntity(
     val id: String = UUID.randomUUID().toString(),
     val nomeP: String,
     val tipo: String,
-    val idade: Int) {
+    val idade: Int,
+    val tutorCpf :String){
 
 }
