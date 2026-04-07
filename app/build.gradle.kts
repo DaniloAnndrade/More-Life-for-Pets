@@ -57,6 +57,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.52")
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.foundation.layout)
     debugImplementation(libs.androidx.ui.tooling)
     ksp("com.google.dagger:hilt-compiler:2.52")
 

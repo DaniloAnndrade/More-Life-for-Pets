@@ -1,15 +1,18 @@
 package com.example.morelifeforpets
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -177,18 +180,20 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
         items(listaDeTutor) { tutor ->
             val petDoTutor = listaDePet.find{ pet -> pet.tutorCpf == tutor.cpf }
 
-            Card(modifier = Modifier
+            Card(modifier = Modifier.size(width = 400.dp, height = 150.dp)
+
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(12.dp)
+                .clickable {  },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)){
                 Column(
                     modifier = Modifier.padding(16.dp)){
-                    Text(text = "Tutor: ${tutor.nomeT} \nEmail: ${tutor.email} \nCPF: ${tutor.cpf} \nTelefone: ${tutor.tell}\n",
+                    Text(text = "Tutor: ${tutor.nomeT} Email: ${tutor.email} \nTelefone: ${tutor.tell}",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Bold)
                     if (petDoTutor != null){
-                        Text(text = "Pet: ${petDoTutor.nomeP} \nTipo: ${petDoTutor.tipo} \nIdade: ${petDoTutor.idade}\n")
+                        Text(text = "Pet: ${petDoTutor.nomeP} Tipo: ${petDoTutor.tipo} ")
                     }
                     else{
                         Text(text = "Esse tutor não possui pets cadastrados")
