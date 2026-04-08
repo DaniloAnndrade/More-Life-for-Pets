@@ -2,6 +2,7 @@ package com.example.morelifeforpets
 
 
 import android.os.Bundle
+import android.widget.Scroller
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -9,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,9 +20,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -64,6 +71,11 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("Exibir"){
                     Exibir(navController,petViewModel,tutorViewModel)
+                }
+                composable("Usuario/{tutorCpf}"){ backStackEntry ->
+                    val cpf = backStackEntry.arguments?.getString("tutorCpf")
+                    Telausuario(navController,petViewModel,tutorViewModel,cpf)
+
                 }
 
             }
@@ -184,7 +196,7 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
 
                 .fillMaxWidth()
                 .padding(12.dp)
-                .clickable {  },
+                .clickable { navController.navigate("Usuario/${tutor.cpf}") },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)){
                 Column(
@@ -203,4 +215,78 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
 
         }
 }}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Telausuario(navController: NavController,
+                petViewModel: PetViewModel,
+                tutorViewModel: TutorViewModel, cpf: String?) {
+    val listaDeTutor by tutorViewModel.todosOsTutores.collectAsState(initial = emptyList())
+    val listaDePet by petViewModel.todasOsPet.collectAsState(initial = emptyList())
 
+    val tutor = listaDeTutor.find { it.cpf == cpf }
+    val pets = listaDePet.filter { it.tutorCpf == cpf }
+
+    if (tutor == null || pets == null) {
+        Text(text = "Tutor não encontrado")
+        return
+    }
+    // AQui e onde tica o top bar do usuario
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(text = tutor.nomeT)
+                })
+        }) { innerPadding ->
+
+
+
+    // card relacionandos aos pets
+
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)){
+
+                LazyColumn(
+
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.
+                    fillMaxSize().
+                    padding(9.dp)
+                ) {
+                    if(pets.isNotEmpty()){
+                        items(pets){ pet ->
+                            Card(modifier = Modifier.
+                            size(width = 400.dp, height = 150.dp)
+                                .fillMaxWidth()
+                                .padding(12.dp) ,
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)){
+                                Column(modifier = Modifier.padding(16.dp)){
+                                    Text(text = "Nome: ${pet.nomeP} Tipo: Idade: ${pet.idade}")
+                                    Text(text = "Tipo: ${pet.tipo}")
+                                }
+                            }
+
+                        }
+                    }
+                    else{
+                        item{
+                            Text(text = "Esse tutor não possui pets cadastrados")
+                        }
+                    }
+                }
+            }
+        }
+}
+
+
+@Composable
+@Preview
+fun teste(){
+
+}
