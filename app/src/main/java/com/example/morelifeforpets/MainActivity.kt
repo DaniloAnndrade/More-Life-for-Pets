@@ -42,6 +42,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigationevent.NavigationEvent
 import com.example.morelifeforpets.model.PetEntity
 import com.example.morelifeforpets.model.TutorEntity
 import com.example.morelifeforpets.ui.PetViewModel
@@ -77,6 +78,9 @@ class MainActivity : ComponentActivity() {
                     Telausuario(navController,petViewModel,tutorViewModel,cpf)
 
                 }
+                composable("NovoPet/{tutorCpf}"){ backStackEntry ->
+                    val cpf = backStackEntry.arguments?.getString("tutorCpf")
+                    novoPet(navController,petViewModel,cpf)
 
             }
 
@@ -254,8 +258,10 @@ fun Telausuario(navController: NavController,
                 LazyColumn(
 
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.
-                    fillMaxSize().
+
+                    modifier = Modifier
+                    .weight(1f)
+                        .fillMaxSize().
                     padding(9.dp)
                 ) {
                     if(pets.isNotEmpty()){
@@ -280,13 +286,61 @@ fun Telausuario(navController: NavController,
                         }
                     }
                 }
-            }
+
+            Button(onClick = {navController.navigate("NovoPet/${tutor.cpf}") }) {
+                Text(text = "+")
+            }}
+
         }
 }
 
+    @Composable
 
-@Composable
-@Preview
-fun teste(){
+fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: String?){
 
-}
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally){
+
+    Text(text = "Cadastro Pet")
+    var nomePet by remember { mutableStateOf("")}
+    OutlinedTextField(
+        value = nomePet,
+        onValueChange = { nomePet = it },
+        label = { Text("Nome Pet")}
+    )
+
+    var tipoPet by remember { mutableStateOf("")}
+    OutlinedTextField(
+        value = tipoPet,
+        onValueChange = { tipoPet = it},
+        label = {Text("Especie ex (Felino,Canidio)")}
+    )
+    var idadePet by remember { mutableStateOf("")}
+    OutlinedTextField(
+        value = idadePet,
+        onValueChange = { idadePet = it},
+        label = {Text("Idade Pet")}
+    )
+
+    Button(onClick = {
+        if (cpf !=null){
+            val novoPet = PetEntity(
+                nomeP = nomePet,
+                tipo = tipoPet,
+                idade = idadePet.toInt(),
+                tutorCpf = cpf)
+            petViewModel.salvarPet(novoPet)
+            navController.popBackStack()
+        }
+    }){
+        Text(text = "Salvar")
+
+    }
+    }
+
+
+}}
+
