@@ -1,4 +1,4 @@
-package com.example.morelifeforpets.ui
+package com.example.morelifeforpets.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

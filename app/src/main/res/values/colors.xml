@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="Cinza">#FFF0F4F8</color>
+    <color name="Azul_Marinho">#FF1A2B4C</color>
+    <color name="Azul_Rio1">#FF00A896</color>
+    <color name="Azul_Rio2">#FF14B8A6</color>
 </resources>
