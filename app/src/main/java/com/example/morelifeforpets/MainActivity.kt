@@ -2,21 +2,24 @@ package com.example.morelifeforpets
 
 
 import android.os.Bundle
-import android.widget.Scroller
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -35,14 +38,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigationevent.NavigationEvent
+import coil.compose.AsyncImage
 import com.example.morelifeforpets.model.PetEntity
 import com.example.morelifeforpets.model.TutorEntity
 import com.example.morelifeforpets.ui.PetViewModel
@@ -265,6 +270,7 @@ fun Telausuario(navController: NavController,
                     padding(9.dp)
                 ) {
                     if(pets.isNotEmpty()){
+
                         items(pets){ pet ->
                             Card(modifier = Modifier.
                             size(width = 400.dp, height = 150.dp)
@@ -272,10 +278,19 @@ fun Telausuario(navController: NavController,
                                 .padding(12.dp) ,
                                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)){
+                                Row(modifier = Modifier.padding(all = 8.dp)) {
+                                    AsyncImage(
+                                        model = R.drawable.gato,
+                                        contentDescription = "Imagem do Pet",
+                                        contentScale = ContentScale.Crop, // Garante que a imagem preencha o círculo perfeitamente
+                                        modifier = Modifier
+                                            .size(100.dp)
+                                            .clip(CircleShape))
+                                    Spacer(modifier = Modifier.width(16.dp))
                                 Column(modifier = Modifier.padding(16.dp)){
                                     Text(text = "Nome: ${pet.nomeP} Tipo: Idade: ${pet.idade}")
                                     Text(text = "Tipo: ${pet.tipo}")
-                                }
+                                }}
                             }
 
                         }
