@@ -1,5 +1,6 @@
 package com.example.morelifeforpets
 
+import android.R.attr.contentDescription
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 
@@ -10,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,11 +24,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -45,6 +55,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -54,6 +65,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.morelifeforpets.model.PetEntity
 import com.example.morelifeforpets.model.TutorEntity
+import com.example.morelifeforpets.ui.components.menupopap
 import com.example.morelifeforpets.ui.screens.PetViewModel
 import com.example.morelifeforpets.ui.screens.TutorViewModel
 import com.example.morelifeforpets.ui.theme.Azul_Marinho
@@ -75,7 +87,7 @@ class MainActivity : ComponentActivity() {
         setContent{
             val fontHome = FontFamily(Font(R.font.poppinssemibold))
 
-
+            // Navegação entre telas , aqui e possivel entender a logica ao entrar em uma tela
             val navController =  rememberNavController()
             NavHost(navController = navController, startDestination = "inicial") {
                 composable("inicial") {
@@ -87,10 +99,11 @@ class MainActivity : ComponentActivity() {
                 composable("Exibir"){
                     Exibir(navController,petViewModel,tutorViewModel)
                 }
+
+                //composable("Usuario/{tutorCpf}") E um rotulo do que sera apresentado
                 composable("Usuario/{tutorCpf}"){ backStackEntry ->
                     val cpf = backStackEntry.arguments?.getString("tutorCpf")
                     Telausuario(navController,petViewModel,tutorViewModel,cpf)
-
                 }
                 composable("NovoPet/{tutorCpf}"){ backStackEntry ->
                     val cpf = backStackEntry.arguments?.getString("tutorCpf")
@@ -106,37 +119,36 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TelaInicial(navController: NavController) {
 
+    // Column é um layout que organiza os seus filhos verticalmente, se usa de forma simples
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center)
         {
 
-
-
             Text(text = "More life  \nPets ", fontSize = 50.sp,
                 fontFamily = FontFamily(Font(R.font.poppinssemibold)),)
             Spacer(modifier = Modifier.size(10.dp))
-            Text(text = "Bem-Vindo", fontSize = 20.sp,
-                fontFamily = FontFamily(Font(R.font.poppinssemibold)),
-            )
 
+            Text(text = "Bem-Vindo", fontSize = 20.sp,
+                fontFamily = FontFamily(Font(R.font.poppinssemibold)),)
             Spacer(modifier = Modifier.size(30.dp))
+
+        // Botão para cadatro, navController e responsavel por navegar entre as telas
         Button(onClick = {navController.navigate("Cadastro") },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Azul_Marinho
-
-            ),shape = RectangleShape){
+                containerColor = Azul_Marinho),shape = RectangleShape){
+            //texto do botão
             Text(text = "Cadastro")
         }
+
         Button(onClick = {navController.navigate("Exibir")},
             colors = ButtonDefaults.buttonColors(
-                containerColor = Azul_Marinho
-            ),shape = RectangleShape,
-            ){
+                containerColor = Azul_Marinho),shape = RectangleShape,){
             Text(text = "Entrar")}
 }}
-@Composable
 
+
+@Composable
 fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutorViewModel: TutorViewModel){
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -144,7 +156,13 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(text = "Cadastro Pet")
+
+        //Remember e para ajudar o compouse a lembrar do que se trata
+        //By e substitui o variavel.value, simplificando o codigo
+        //MutableState e onde se observa o que o usuario ira escrever
+
          var nomePet by remember { mutableStateOf("")}
+        //Definição de campo de texto, com o link para o PetViewModel, pegando o atributo nomePet
         OutlinedTextField(
             value = nomePet,
             onValueChange = { nomePet = it },
@@ -152,11 +170,16 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
         )
 
         var tipoPet by remember { mutableStateOf("")}
-        OutlinedTextField(
-            value = tipoPet,
-            onValueChange = { tipoPet = it},
-            label = {Text("Especie ex (Felino,Canidio)")}
-        )
+
+        //Chamando a função menupopap
+        menupopap(
+            especie = tipoPet,
+            onEspecieChange = { NovaEscolha ->
+                tipoPet = NovaEscolha
+                })
+
+
+
         var idadePet by remember { mutableStateOf("")}
         OutlinedTextField(
             value = idadePet,
@@ -196,11 +219,10 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
             val novoTutor = TutorEntity(nomeT = nomeTutor, email = email, cpf = cpf, tell = tell)
             val novoPet = PetEntity(nomeP = nomePet, tipo = tipoPet, idade = idadePet.toInt(), tutorCpf = cpf)
 
+            // Chamar a função para salvar os dados no banco de dados
             petViewModel.salvarPet(novoPet)
             tutorViewModel.salvar(novoTutor)
             navController.navigate("Exibir")
-
-
         },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Azul_Marinho
@@ -211,6 +233,7 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
 
 
 }
+    //OptIN e quando algo ainda esta em desenvolvimento
     @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewModel: TutorViewModel) {
@@ -222,14 +245,16 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
         containerColor = Azul_Marinho,
         titleContentColor = MaterialTheme.colorScheme.primary),
         title ={ Text (text = "Lista de Cadastrados",color = Cinza)})}){innerPadding ->
-
+//LazyColumn é um layout que organiza para formatos mais complexos ou que necessita de agrupar os itens
+        //Aqui e necessario os elemento esteja dentro de um Item{}
     LazyColumn(
 
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()) {
 
-        // Seção de Tutores }
+        // Seção de Tutores Pega todos os tutores e apresenta.
+        // item para apena 1 elementro - items para mais de 1 elemento
         items(listaDeTutor) { tutor ->
             val petDoTutor = listaDePet.find{ pet -> pet.tutorCpf == tutor.cpf }
 
@@ -263,6 +288,7 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
 fun Telausuario(navController: NavController,
                 petViewModel: PetViewModel,
                 tutorViewModel: TutorViewModel, cpf: String?) {
+    // faz um push do banco de dados PetViewModel e TutorViewModel
     val listaDeTutor by tutorViewModel.todosOsTutores.collectAsState(initial = emptyList())
     val listaDePet by petViewModel.todasOsPet.collectAsState(initial = emptyList())
 
@@ -273,7 +299,7 @@ fun Telausuario(navController: NavController,
         Text(text = "Tutor não encontrado")
         return
     }
-    // AQui e onde tica o top bar do usuario
+    // AQui e onde fica o top bar do usuario
     Scaffold(
         topBar = {
             TopAppBar(
@@ -313,6 +339,8 @@ fun Telausuario(navController: NavController,
                                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                                 colors = CardDefaults.cardColors(containerColor = Azul_Marinho)){
                                 Row(modifier = Modifier.padding(all = 8.dp)) {
+
+                                    // inicindo uma imagem
                                     AsyncImage(
                                         model = R.drawable.gato,
                                         contentDescription = "Imagem do Pet",
@@ -364,11 +392,14 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
     )
 
     var tipoPet by remember { mutableStateOf("")}
-    OutlinedTextField(
-        value = tipoPet,
-        onValueChange = { tipoPet = it},
-        label = {Text("Especie ex (Felino,Canidio)")}
-    )
+        menupopap(
+            especie = tipoPet,
+            onEspecieChange = { NovaEscolha ->
+                tipoPet = NovaEscolha
+            }
+        )
+
+
     var idadePet by remember { mutableStateOf("")}
     OutlinedTextField(
         value = idadePet,
@@ -396,4 +427,7 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
 
 
 }}
+
+
+
 

@@ -24,7 +24,8 @@ class DatabaseModule {
             context,
             Database::class.java,
             "clinicaMore_db"
-        ).build()
+        )
+            .build()
     }
 
     @Provides
