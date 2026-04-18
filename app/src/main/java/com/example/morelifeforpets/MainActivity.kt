@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
@@ -52,9 +53,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -183,22 +187,25 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
         var idadePet by remember { mutableStateOf("")}
         OutlinedTextField(
             value = idadePet,
-            onValueChange = { idadePet = it},
-            label = {Text("Idade Pet")}
+            onValueChange = { idadePet = it },
+            label = {Text("Idade Pet")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Text(text = "Cadastro Tutor")
         var nomeTutor by remember { mutableStateOf("")}
         OutlinedTextField(
             value = nomeTutor,
             onValueChange = { nomeTutor = it },
-            label = {Text("Nome Tutor")}
+            label = { Text("Nome Tutor")},
+
 
         )
         var tell  by remember { mutableStateOf("")}
         OutlinedTextField(
             value = tell,
             onValueChange = { tell = it},
-            label = { Text ( "Telefone")}
+            label = { Text ( "Telefone")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
 
         )
         var email by  remember { mutableStateOf("")}
@@ -212,7 +219,8 @@ fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutor
         OutlinedTextField(
             value = cpf,
             onValueChange = { cpf = it},
-            label = { Text ("CPF")}
+            label = { Text ("CPF")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
                 // Salva os dados no banco de dados Room
         Button(onClick = {
@@ -266,6 +274,10 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
                 .clickable { navController.navigate("Usuario/${tutor.cpf}") },
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                 colors = CardDefaults.cardColors(containerColor = Azul_Marinho)){
+                Row (modifier = Modifier.padding(4.dp),
+                    verticalAlignment = Alignment.CenterVertically) {
+
+
                 Column(
                     modifier = Modifier.padding(16.dp)){
                     Text(text = "Tutor: ${tutor.nomeT} Email: ${tutor.email} \nTelefone: ${tutor.tell}",
@@ -278,11 +290,34 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
                     else{
                         Text(text = "Esse tutor não possui pets cadastrados",color = Cinza)
                     }
+                    }
+                    Column(modifier = Modifier.padding(5.dp)){
+
+
+                    IconButton(onClick = {},
+                        modifier = Modifier.size(50.dp)){
+                            Icon(
+                                painter = painterResource(id = R.drawable.botaodedeletar),
+                                contentDescription = "Delete",
+                                tint = Color.Unspecified,
+                                modifier = Modifier.size(35.dp))
+                        }
+
+
+                    IconButton(onClick = {},
+                        modifier = Modifier.size(50.dp)){
+                        Icon(painter = painterResource(id = R.drawable.editar),
+                            contentDescription = "Editar",
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(35.dp))
+                    }
+
             }
+
             }
 
         }
-}}}
+}}}}
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Telausuario(navController: NavController,
@@ -307,9 +342,20 @@ fun Telausuario(navController: NavController,
                     containerColor = Azul_Marinho,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
+
                 title = {
-                    Text(text = tutor.nomeT,color = Cinza)
-                })
+                    Text(text = tutor.nomeT,color = Cinza)},
+
+                    actions = {
+                        IconButton(onClick = {},
+                            modifier =  Modifier.size(50.dp)){
+                            Icon(painter = painterResource(id = R.drawable.editar),
+                                contentDescription = "Editar",
+                                tint = Color.Unspecified,
+                                modifier = Modifier.size(35.dp))
+                        }
+                    }
+                )
         }) { innerPadding ->
 
 
@@ -346,13 +392,41 @@ fun Telausuario(navController: NavController,
                                         contentDescription = "Imagem do Pet",
                                         contentScale = ContentScale.Crop, // Garante que a imagem preencha o círculo perfeitamente
                                         modifier = Modifier
-                                            .size(100.dp)
+                                            .size(50.dp)
                                             .clip(CircleShape))
                                     Spacer(modifier = Modifier.width(16.dp))
                                 Column(modifier = Modifier.padding(16.dp)){
-                                    Text(text = "Nome: ${pet.nomeP} Tipo: Idade: ${pet.idade}",color = Cinza)
+                                    Text(text = "Nome: ${pet.nomeP} \n Idade: ${pet.idade}",color = Cinza)
                                     Text(text = "Tipo: ${pet.tipo}",color = Cinza)
-                                }}
+                                }
+
+                                    Column(
+                                        horizontalAlignment = Alignment.End,
+                                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    ){
+
+                                        IconButton (onClick = {},
+                                            modifier = Modifier.size(50.dp)){
+                                         Icon(painter = painterResource(id = R.drawable.botaodedeletar),
+                                             contentDescription = "Delete",
+                                                     tint = Color.Unspecified,
+                                             modifier = Modifier.size(35.dp))
+                                        }
+
+                                        IconButton (onClick = {},
+                                                modifier = Modifier.size(35.dp)){
+                                            Icon(painter = painterResource(id = R.drawable.editar),
+                                                contentDescription = "Editar",
+                                                tint = Color.Unspecified,
+                                                modifier = Modifier.size(50.dp)
+
+                                                )}
+
+                                    }
+                                }
+
+
+
                             }
 
                         }
@@ -375,58 +449,63 @@ fun Telausuario(navController: NavController,
 
     @Composable
 
-fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: String?){
+fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: String?) {
 
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally){
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-    Text(text = "Cadastro Pet")
-    var nomePet by remember { mutableStateOf("")}
-    OutlinedTextField(
-        value = nomePet,
-        onValueChange = { nomePet = it },
-        label = { Text("Nome Pet")}
-    )
+            Text(text = "Cadastro Pet")
+            var nomePet by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = nomePet,
+                onValueChange = { nomePet = it },
+                label = { Text("Nome Pet") }
+            )
 
-    var tipoPet by remember { mutableStateOf("")}
-        menupopap(
-            especie = tipoPet,
-            onEspecieChange = { NovaEscolha ->
-                tipoPet = NovaEscolha
+            var tipoPet by remember { mutableStateOf("") }
+            menupopap(
+                especie = tipoPet,
+                onEspecieChange = { NovaEscolha ->
+                    tipoPet = NovaEscolha
+                }
+            )
+
+
+            var idadePet by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = idadePet,
+                onValueChange = { idadePet = it },
+                label = { Text("Idade Pet") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            Button(
+                onClick = {
+                    if (cpf != null) {
+                        val novoPet = PetEntity(
+                            nomeP = nomePet,
+                            tipo = tipoPet,
+                            idade = idadePet.toInt(),
+                            tutorCpf = cpf
+                        )
+                        petViewModel.salvarPet(novoPet)
+                        navController.popBackStack()
+                    }
+                }, colors = ButtonDefaults.buttonColors(
+                    containerColor = Azul_Marinho
+                )
+            ) {
+                Text(text = "Salvar", color = Cinza)
+
             }
-        )
-
-
-    var idadePet by remember { mutableStateOf("")}
-    OutlinedTextField(
-        value = idadePet,
-        onValueChange = { idadePet = it},
-        label = {Text("Idade Pet")}
-    )
-
-    Button(onClick = {
-        if (cpf !=null){
-            val novoPet = PetEntity(
-                nomeP = nomePet,
-                tipo = tipoPet,
-                idade = idadePet.toInt(),
-                tutorCpf = cpf)
-            petViewModel.salvarPet(novoPet)
-            navController.popBackStack()
         }
-    },colors = ButtonDefaults.buttonColors(
-        containerColor = Azul_Marinho
-    )){
-        Text(text = "Salvar",color = Cinza)
-
-    }
-    }
 
 
-}}
+    }}
 
 
 

@@ -19,5 +19,10 @@ class TutorViewModel @Inject constructor(private val tutorDao: TutorDao): ViewMo
         viewModelScope.launch(Dispatchers.IO){
             tutorDao.addTutor(tutor)
         }
+        fun Deletar(tutor: TutorEntity){
+            viewModelScope.launch{
+                tutorDao.deleteTutor(tutor)
+            }
+        }
     }
 }

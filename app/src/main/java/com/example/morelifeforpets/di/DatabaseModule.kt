@@ -23,8 +23,8 @@ class DatabaseModule {
         return Room.databaseBuilder(
             context,
             Database::class.java,
-            "clinicaMore_db"
-        )
+            "clinicaMore_db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 
