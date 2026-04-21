@@ -17,5 +17,11 @@ class PetViewModel @Inject constructor(private val petDao: PetDao): ViewModel() 
         viewModelScope.launch(Dispatchers.IO){
             petDao.addPet(pet)
         }
-    }
-}
+
+
+        }
+
+    fun Deletar(pet: PetEntity){
+        viewModelScope.launch{
+            petDao.delPet(pet)}
+}}

@@ -294,7 +294,7 @@ fun Exibir(navController: NavController, petViewModel: PetViewModel, tutorViewMo
                     Column(modifier = Modifier.padding(5.dp)){
 
 
-                    IconButton(onClick = {},
+                    IconButton(onClick = {tutorViewModel.Deletar(tutor)},
                         modifier = Modifier.size(50.dp)){
                             Icon(
                                 painter = painterResource(id = R.drawable.botaodedeletar),
@@ -405,7 +405,7 @@ fun Telausuario(navController: NavController,
                                         verticalArrangement = Arrangement.spacedBy(8.dp),
                                     ){
 
-                                        IconButton (onClick = {},
+                                        IconButton (onClick = {petViewModel.Deletar(pet)},
                                             modifier = Modifier.size(50.dp)){
                                          Icon(painter = painterResource(id = R.drawable.botaodedeletar),
                                              contentDescription = "Delete",
