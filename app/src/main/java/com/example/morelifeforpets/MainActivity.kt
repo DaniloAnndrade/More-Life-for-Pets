@@ -114,6 +114,11 @@ class MainActivity : ComponentActivity() {
                     novoPet(navController,petViewModel,cpf)
 
             }
+                composable("Editar"){backStackEntry ->
+                    popUpEditar(navController,tutorViewModel)
+
+
+                }
 
             }
     }
@@ -507,6 +512,10 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
 
     }}
 
+fun popUpEditar(navController: NavController, tutorViewModel: TutorViewModel){
 
+    
+
+}
 
 
