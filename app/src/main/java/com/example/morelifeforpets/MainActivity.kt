@@ -4,11 +4,13 @@ import android.R.attr.contentDescription
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +47,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -76,7 +79,9 @@ import com.example.morelifeforpets.ui.theme.Azul_Marinho
 import com.example.morelifeforpets.ui.theme.Azul_Rio1
 import com.example.morelifeforpets.ui.theme.Azul_Rio2
 import com.example.morelifeforpets.ui.theme.Cinza
+import com.example.morelifeforpets.ui.theme.Teste_Verde
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 
@@ -93,7 +98,14 @@ class MainActivity : ComponentActivity() {
 
             // Navegação entre telas , aqui e possivel entender a logica ao entrar em uma tela
             val navController =  rememberNavController()
-            NavHost(navController = navController, startDestination = "inicial") {
+            NavHost(navController = navController, startDestination = "TelaLogo") {
+                composable("TelaLogo") {
+                    TelaLogo(onTimeout = {
+                        navController.navigate("inicial"){
+                            popUpTo("TelaLogo") { inclusive = true }
+
+                        } })
+                }
                 composable("inicial") {
                     TelaInicial(navController)
                 }
@@ -126,34 +138,66 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun TelaLogo(onTimeout: ()  -> Unit){
+    LaunchedEffect(Unit) {
+        delay(5000)//Aguarda 5000 milissegundos (5 segundos)
+        onTimeout()
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ){
+        Image(painter = painterResource(id = R.drawable.geminigene),
+            contentDescription = "TelaLogo",
+            contentScale = ContentScale.Crop) // Coloca a imagem em tela proporcionalmente
+
+    }
+}
+
+@Composable
 fun TelaInicial(navController: NavController) {
 
+    Box(modifier = Modifier.fillMaxSize()){
+
+        Image( painter = painterResource(id = R.drawable.geminigene),
+            contentDescription = "PLano de fundo",
+            modifier = Modifier. fillMaxSize(),
+            contentScale = ContentScale.Crop)// Coloca a imagem em tela proporcionalmente
+
+    }
     // Column é um layout que organiza os seus filhos verticalmente, se usa de forma simples
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center)
+        modifier = Modifier.fillMaxSize().padding(32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally)
         {
-
-            Text(text = "More life  \nPets ", fontSize = 50.sp,
+            Spacer(modifier = Modifier.size(90.dp))
+            Text(text = "More life  \n     Pets ", fontSize = 50.sp,
                 fontFamily = FontFamily(Font(R.font.poppinssemibold)),)
-            Spacer(modifier = Modifier.size(10.dp))
+
 
             Text(text = "Bem-Vindo", fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.poppinssemibold)),)
-            Spacer(modifier = Modifier.size(30.dp))
+            Spacer(modifier = Modifier.height(350.dp))
 
         // Botão para cadatro, navController e responsavel por navegar entre as telas
-        Button(onClick = {navController.navigate("Cadastro") },
+        Button(onClick = {navController.navigate("Exibir") },
+            modifier = Modifier.fillMaxWidth().height(56.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Azul_Marinho),shape = RectangleShape){
-            //texto do botão
-            Text(text = "Cadastro")
-        }
+                containerColor = Teste_Verde),shape = RectangleShape){
 
-        Button(onClick = {navController.navigate("Exibir")},
+            //texto do botão
+            Text(text = "Entrar",
+                fontSize = 30.sp
+                )
+        }
+Spacer (modifier = Modifier.height(20.dp))
+        Button(onClick = {navController.navigate("Cadastro")},
+            modifier = Modifier.fillMaxWidth().height(56.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Azul_Marinho),shape = RectangleShape,){
-            Text(text = "Entrar")}
+                containerColor = Teste_Verde),shape = RectangleShape,){
+            Text(text = "Cadastro",
+                fontSize = 30.sp)}
 }}
 
 
@@ -514,8 +558,9 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
 
 fun popUpEditar(navController: NavController, tutorViewModel: TutorViewModel){
 
-    
+
 
 }
+
 
 
