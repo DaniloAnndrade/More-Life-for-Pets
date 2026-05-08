@@ -42,8 +42,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -500,37 +502,78 @@ fun Telausuario(navController: NavController,
 
 fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: String?) {
 
+    Box(modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center){
+
+        Image(painter = painterResource(id = R.drawable.planodefundo),
+            contentDescription = "PLano de fundo",
+            contentScale =  ContentScale.Crop)
+
+    }
 
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize().padding(70.dp),
+
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(painter = painterResource(id = R.drawable.novo),
+                contentDescription = "Logo Pets",
+                modifier = Modifier.size(170.dp))
+            Spacer(modifier = Modifier.height(22.dp))
+            Text(text = "Cadastro Pet", fontSize = 30.sp)
+            Spacer(modifier = Modifier.height(40.dp))
 
-            Text(text = "Cadastro Pet")
             var nomePet by remember { mutableStateOf("") }
             OutlinedTextField(
                 value = nomePet,
                 onValueChange = { nomePet = it },
-                label = { Text("Nome Pet") }
+                label = { Text("Nome Pet") },
+                colors = OutlinedTextFieldDefaults.colors(
+                    //Cor do fundo
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    //Cor da Borda
+                    focusedBorderColor = Teste_Verde,
+                    unfocusedBorderColor = Teste_Verde,
+                    //Cor do Texto
+                    focusedLabelColor = Teste_Verde,
+                    unfocusedLabelColor = Teste_Verde)
             )
+            Spacer(modifier = Modifier.height(16.dp))
 
             var tipoPet by remember { mutableStateOf("") }
             menupopap(
                 especie = tipoPet,
                 onEspecieChange = { NovaEscolha ->
                     tipoPet = NovaEscolha
-                }
-            )
+                },
 
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
             var idadePet by remember { mutableStateOf("") }
             OutlinedTextField(
                 value = idadePet,
                 onValueChange = { idadePet = it },
                 label = { Text("Idade Pet") },
+                colors = OutlinedTextFieldDefaults.colors(
+                    //Cor do fundo
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    //Cor da Borda
+                    focusedBorderColor = Teste_Verde,
+                    unfocusedBorderColor = Teste_Verde,
+                    //Cor do Texto
+                    focusedLabelColor = Teste_Verde,
+                    unfocusedLabelColor = Teste_Verde),
+
+
+
+
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
+
+            Spacer(modifier = Modifier.height(160.dp))
 
             Button(
                 onClick = {
@@ -544,11 +587,12 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
                         petViewModel.salvarPet(novoPet)
                         navController.popBackStack()
                     }
-                }, colors = ButtonDefaults.buttonColors(
-                    containerColor = Azul_Marinho
-                )
+                },modifier = Modifier.fillMaxWidth().height(50.dp)
+                , colors = ButtonDefaults.buttonColors(
+                    containerColor = Teste_Verde
+                ), shape = RectangleShape
             ) {
-                Text(text = "Salvar", color = Cinza)
+                Text(text = "Salvar", fontSize = 30.sp)
 
             }
         }
