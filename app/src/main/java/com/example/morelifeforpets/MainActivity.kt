@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                     TelaInicial(navController)
                 }
                 composable("Cadastro") {
-                    TelaCadastro(navController,petViewModel,tutorViewModel)
+                    NovoTutor(navController,tutorViewModel)
                 }
                 composable("Exibir"){
                     Exibir(navController,petViewModel,tutorViewModel)
@@ -128,11 +128,7 @@ class MainActivity : ComponentActivity() {
                     novoPet(navController,petViewModel,cpf)
 
             }
-                composable("Editar"){backStackEntry ->
-                    popUpEditar(navController,tutorViewModel)
 
-
-                }
 
             }
     }
@@ -203,95 +199,128 @@ Spacer (modifier = Modifier.height(20.dp))
 }}
 
 
-@Composable
-fun TelaCadastro(navController: NavController, petViewModel: PetViewModel, tutorViewModel: TutorViewModel){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text(text = "Cadastro Pet")
+    @Composable
+    fun NovoTutor(navController: NavController, tutorViewModel: TutorViewModel){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center){
 
-        //Remember e para ajudar o compouse a lembrar do que se trata
-        //By e substitui o variavel.value, simplificando o codigo
-        //MutableState e onde se observa o que o usuario ira escrever
-
-         var nomePet by remember { mutableStateOf("")}
-        //Definição de campo de texto, com o link para o PetViewModel, pegando o atributo nomePet
-        OutlinedTextField(
-            value = nomePet,
-            onValueChange = { nomePet = it },
-            label = { Text("Nome Pet")}
-        )
-
-        var tipoPet by remember { mutableStateOf("")}
-
-        //Chamando a função menupopap
-        menupopap(
-            especie = tipoPet,
-            onEspecieChange = { NovaEscolha ->
-                tipoPet = NovaEscolha
-                })
+            Image(painter = painterResource(id = R.drawable.planodefundo),
+                contentDescription = "PLano de fundo",
+                contentScale =  ContentScale.Crop)
 
 
+        Column(
+            modifier = Modifier.fillMaxSize().padding(70.dp),
 
-        var idadePet by remember { mutableStateOf("")}
-        OutlinedTextField(
-            value = idadePet,
-            onValueChange = { idadePet = it },
-            label = {Text("Idade Pet")},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-        Text(text = "Cadastro Tutor")
-        var nomeTutor by remember { mutableStateOf("")}
-        OutlinedTextField(
-            value = nomeTutor,
-            onValueChange = { nomeTutor = it },
-            label = { Text("Nome Tutor")},
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(painter = painterResource(id = R.drawable.novo),
+                contentDescription = "Logo Pets",
+                modifier = Modifier.size(170.dp))
+            Spacer(modifier = Modifier.height(22.dp))
+            Text(text = "Cadastro Tutor", fontSize = 30.sp)
+            Spacer(modifier = Modifier.height(40.dp))
+
+            var nomeTutor by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = nomeTutor,
+                onValueChange = { nomeTutor = it },
+                label = { Text("Nome Tutor") },
+                colors = OutlinedTextFieldDefaults.colors(
+                    //Cor do fundo
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    //Cor da Borda
+                    focusedBorderColor = Teste_Verde,
+                    unfocusedBorderColor = Teste_Verde,
+                    //Cor do Texto
+                    focusedLabelColor = Teste_Verde,
+                    unfocusedLabelColor = Teste_Verde)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            var tell by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = tell,
+                onValueChange = { tell= it},
+                label = { Text ("Telefone")},
+                colors = OutlinedTextFieldDefaults.colors(
+                    //Cor do fundo
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    //Cor da Borda
+                    focusedBorderColor = Teste_Verde,
+                    unfocusedBorderColor = Teste_Verde,
+                    //Cor do Texto
+                    focusedLabelColor = Teste_Verde,
+                    unfocusedLabelColor = Teste_Verde),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            var email by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                colors = OutlinedTextFieldDefaults.colors(
+                    //Cor do fundo
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    //Cor da Borda
+                    focusedBorderColor = Teste_Verde,
+                    unfocusedBorderColor = Teste_Verde,
+                    //Cor do Texto
+                    focusedLabelColor = Teste_Verde,
+                    unfocusedLabelColor = Teste_Verde),
+
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            var cpf by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = cpf,
+                onValueChange = { cpf = it },
+                label = { Text("CPF") },
+                colors = OutlinedTextFieldDefaults.colors(
+                    //Cor do fundo
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    //Cor da Borda
+                    focusedBorderColor = Teste_Verde,
+                    unfocusedBorderColor = Teste_Verde,
+                    //Cor do Texto
+                    focusedLabelColor = Teste_Verde,
+                    unfocusedLabelColor = Teste_Verde),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
+
+            Spacer(modifier = Modifier.height(90.dp))
+            //val novoTutor = TutorEntity(nomeT = nomeTutor, email = email, cpf = cpf, tell = tell)
+            Button(
+                onClick = {
+                    val novoTutor = TutorEntity(
+                        nomeT = nomeTutor,
+                        email = email,
+                        cpf = cpf,
+                        tell = tell)
+                    tutorViewModel.salvar(novoTutor)
+                    navController.navigate("NovoPet/${cpf}")
 
 
-        )
-        var tell  by remember { mutableStateOf("")}
-        OutlinedTextField(
-            value = tell,
-            onValueChange = { tell = it},
-            label = { Text ( "Telefone")},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        },modifier = Modifier.fillMaxWidth().height(50.dp)
+        , colors = ButtonDefaults.buttonColors(
+            containerColor = Teste_Verde
+        ), shape = RectangleShape
+        ) {
+            Text(text = "Salvar", fontSize = 30.sp)
 
-        )
-        var email by  remember { mutableStateOf("")}
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email= it},
-            label = { Text ("Email")}
-        )
+        }
 
-        var cpf by remember { mutableStateOf("")}
-        OutlinedTextField(
-            value = cpf,
-            onValueChange = { cpf = it},
-            label = { Text ("CPF")},
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-                // Salva os dados no banco de dados Room
-        Button(onClick = {
-            val novoTutor = TutorEntity(nomeT = nomeTutor, email = email, cpf = cpf, tell = tell)
-            val novoPet = PetEntity(nomeP = nomePet, tipo = tipoPet, idade = idadePet.toInt(), tutorCpf = cpf)
+        }
 
-            // Chamar a função para salvar os dados no banco de dados
-            petViewModel.salvarPet(novoPet)
-            tutorViewModel.salvar(novoTutor)
-            navController.navigate("Exibir")
-        },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Azul_Marinho
-            ),shape = RectangleShape )
-        {Text(text = "Salvar")}
+        }}
 
-    }
-
-
-}
     //OptIN e quando algo ainda esta em desenvolvimento
     @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -585,7 +614,7 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
                             tutorCpf = cpf
                         )
                         petViewModel.salvarPet(novoPet)
-                        navController.popBackStack()
+                        navController.navigate("Usuario/$cpf")
                     }
                 },modifier = Modifier.fillMaxWidth().height(50.dp)
                 , colors = ButtonDefaults.buttonColors(
@@ -600,11 +629,7 @@ fun novoPet(navController: NavController, petViewModel: PetViewModel, cpf: Strin
 
     }}
 
-fun popUpEditar(navController: NavController, tutorViewModel: TutorViewModel){
 
-
-
-}
 
 
 
